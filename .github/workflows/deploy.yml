@@ -34,6 +34,8 @@ jobs:
       - name: Remove dev dependencies
         working-directory: cms
         run: npm prune --omit=dev
+      - name: Ensure uploads directory exists
+        run: mkdir -p cms/public/uploads
       - name: Create .skipBuild marker
         run: touch cms/.skipBuild
       - uses: azure/webapps-deploy@v3
