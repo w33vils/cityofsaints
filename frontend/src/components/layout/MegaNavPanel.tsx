@@ -83,7 +83,7 @@ export const megaPanels: Record<PanelKey, PanelData> = {
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.03 } } };
 const fadeUp = {
   hidden: { opacity: 0, y: 6 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] as const } },
 };
 
 export function MegaNavPanel({ panelKey }: { panelKey: PanelKey }) {
