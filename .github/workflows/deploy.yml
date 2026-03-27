@@ -12,9 +12,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: cms/package-lock.json
-      - run: cd cms && npm ci && npm run build
+      - run: cd cms && npm install && npm run build
       - uses: azure/webapps-deploy@v3
         with:
           app-name: cityofsaints-cms
@@ -28,9 +26,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-      - run: cd frontend && npm ci && npm run build
+      - run: cd frontend && npm install && npm run build
         env:
           NEXT_PUBLIC_STRAPI_URL: ${{ secrets.STRAPI_URL }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.SITE_URL }}
@@ -38,4 +34,5 @@ jobs:
         with:
           app-name: cityofsaints-frontend
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
+          package: ./frontend
           package: ./frontend
