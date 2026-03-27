@@ -35,4 +35,3 @@ jobs:
           app-name: cityofsaints-frontend
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
           package: ./frontend
-          package: ./frontend
