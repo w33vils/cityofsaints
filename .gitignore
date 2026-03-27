@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+build/
+.cache/
+.tmp/
+
+# Environment (secrets)
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker volumes
+postgres-data/
+
+# Strapi uploads (use cloud storage in production)
+cms/public/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Lock files (optional — remove this line if you want to commit them)
+# package-lock.json
+
+# One-time scripts
+download-images.ps1
