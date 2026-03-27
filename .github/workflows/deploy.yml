@@ -12,7 +12,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: cd cms && npm install && npm run build
+      - name: Install CMS dependencies
+        run: cd cms && npm install
+      - name: Build CMS
+        run: cd cms && npm run build
+        env:
+          NODE_ENV: production
+          DATABASE_CLIENT: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          DATABASE_NAME: placeholder
+          DATABASE_USERNAME: placeholder
+          DATABASE_PASSWORD: placeholder
+          APP_KEYS: build-key-1,build-key-2,build-key-3,build-key-4
+          API_TOKEN_SALT: build-salt
+          ADMIN_JWT_SECRET: build-admin-jwt
+          TRANSFER_TOKEN_SALT: build-transfer-salt
+          JWT_SECRET: build-jwt
       - uses: azure/webapps-deploy@v3
         with:
           app-name: cityofsaints-cms
@@ -26,7 +42,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: cd frontend && npm install && npm run build
+      - name: Install frontend dependencies
+        run: cd frontend && npm install
+      - name: Build frontend
+        run: cd frontend && npm run build
         env:
           NEXT_PUBLIC_STRAPI_URL: ${{ secrets.STRAPI_URL }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.SITE_URL }}
