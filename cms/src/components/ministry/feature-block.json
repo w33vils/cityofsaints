@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_ministry_feature_blocks",
+  "info": {
+    "displayName": "Feature Block",
+    "icon": "layout",
+    "description": "Ministry feature block with heading, body, and icon"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

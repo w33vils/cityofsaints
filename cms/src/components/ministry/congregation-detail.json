@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_ministry_congregation_details",
+  "info": {
+    "displayName": "Congregation Detail",
+    "icon": "mapPin",
+    "description": "Ministry info specific to a location"
+  },
+  "options": {},
+  "attributes": {
+    "location": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "director": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team-member.team-member"
+    }
+  }
+}

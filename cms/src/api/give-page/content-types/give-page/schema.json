@@ -1,0 +1,57 @@
+{
+  "kind": "singleType",
+  "collectionName": "give_pages",
+  "info": {
+    "singularName": "give-page",
+    "pluralName": "give-pages",
+    "displayName": "Give Page",
+    "description": "Giving page content and configuration"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "give_url": {
+      "type": "string",
+      "required": true
+    },
+    "intro_heading": {
+      "type": "string"
+    },
+    "why_give": {
+      "type": "richtext"
+    },
+    "why_give_to_us": {
+      "type": "richtext"
+    },
+    "primary_methods": {
+      "type": "component",
+      "repeatable": true,
+      "component": "give.payment-method"
+    },
+    "other_methods": {
+      "type": "component",
+      "repeatable": true,
+      "component": "give.other-method"
+    },
+    "financial_documents": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["files", "images"]
+    },
+    "ecfa_member": {
+      "type": "boolean"
+    },
+    "faqs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.faq"
+    }
+  }
+}

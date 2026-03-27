@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-accent: 'DM Sans', sans-serif;
+  --color-bg: #FAFAF8;
+  --color-bg-alt: #F2F0EB;
+  --color-dark: #1A1A1A;
+  --color-dark-surface: #242424;
+  --color-text: #3D3D3D;
+  --color-heading: #1A1A1A;
+  --color-muted: #7A7A7A;
+  --color-on-dark: #FAFAF8;
+  --color-on-dark-muted: #A0A0A0;
+  --color-green: #2D5A27;
+  --color-green-light: #3A7232;
+  --color-green-dark: #1E3D1A;
+  --color-gold: #C4A265;
+  --color-gold-light: #D4B87A;
+  --color-error: #B33A3A;
+}
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font-body); color: var(--color-text); background: var(--color-bg); line-height: 1.65; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); color: var(--color-heading); line-height: 1.15; letter-spacing: -0.02em; }
+
+@keyframes ken-burns { from { transform: scale(1); } to { transform: scale(1.05); } }
+.animate-ken-burns { animation: ken-burns 20s ease-out forwards; will-change: transform; }
+
+/* GPU acceleration for animated elements */
+[style*="opacity"], [style*="transform"] { will-change: opacity, transform; }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .animate-ken-burns { animation: none; } /* Disable Ken Burns on mobile for performance */
+}
+
+/* Horizontal scroll: hide scrollbar on touch devices for clean look */
+.overflow-x-auto { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.overflow-x-auto::-webkit-scrollbar { display: none; }
+
+/* Prose-like rich text styling */
+.prose { max-width: 65ch; }
+.prose p { margin-bottom: 1em; }
+.prose h2 { margin-top: 2em; margin-bottom: 0.5em; }
+.prose h3 { margin-top: 1.5em; margin-bottom: 0.5em; }
+.prose ul { list-style: disc; padding-left: 1.5em; margin-bottom: 1em; }
+.prose ol { list-style: decimal; padding-left: 1.5em; margin-bottom: 1em; }

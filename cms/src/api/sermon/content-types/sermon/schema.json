@@ -1,0 +1,81 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sermons",
+  "info": {
+    "singularName": "sermon",
+    "pluralName": "sermons",
+    "displayName": "Sermon",
+    "description": "Weekly sermons and messages"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "preacher": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::team-member.team-member",
+      "inversedBy": "sermons"
+    },
+    "series": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::sermon-series.sermon-series",
+      "inversedBy": "sermons"
+    },
+    "scripture": {
+      "type": "string"
+    },
+    "book": {
+      "type": "enumeration",
+      "enum": [
+        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
+        "Joshua", "Judges", "Ruth", "First Samuel", "Second Samuel",
+        "First Kings", "Second Kings", "First Chronicles", "Second Chronicles",
+        "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs",
+        "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah",
+        "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel",
+        "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk",
+        "Zephaniah", "Haggai", "Zechariah", "Malachi",
+        "Matthew", "Mark", "Luke", "John", "Acts",
+        "Romans", "First Corinthians", "Second Corinthians", "Galatians",
+        "Ephesians", "Philippians", "Colossians",
+        "First Thessalonians", "Second Thessalonians",
+        "First Timothy", "Second Timothy", "Titus", "Philemon",
+        "Hebrews", "James", "First Peter", "Second Peter",
+        "First John", "Second John", "Third John", "Jude", "Revelation"
+      ]
+    },
+    "format": {
+      "type": "enumeration",
+      "enum": ["Audio", "Video", "Audio & Video"]
+    },
+    "audio_url": {
+      "type": "string"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "richtext"
+    },
+    "cover_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

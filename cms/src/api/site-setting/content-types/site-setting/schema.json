@@ -1,0 +1,78 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site Settings",
+    "description": "Global site configuration"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "church_name": {
+      "type": "string",
+      "default": "City of Saints"
+    },
+    "church_name_polish": {
+      "type": "string",
+      "default": "Miasto Świętych"
+    },
+    "tagline": {
+      "type": "string",
+      "default": "A Protestant church in Łódź, Poland"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "logo_stacked": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "favicon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "social_facebook": {
+      "type": "string"
+    },
+    "social_instagram": {
+      "type": "string"
+    },
+    "social_youtube": {
+      "type": "string"
+    },
+    "social_spotify": {
+      "type": "string"
+    },
+    "social_apple_podcasts": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "email"
+    },
+    "contact_phone": {
+      "type": "string"
+    },
+    "jobs_url": {
+      "type": "string"
+    },
+    "give_url": {
+      "type": "string"
+    },
+    "default_currency": {
+      "type": "string",
+      "default": "PLN"
+    },
+    "default_locale": {
+      "type": "string",
+      "default": "en"
+    }
+  }
+}

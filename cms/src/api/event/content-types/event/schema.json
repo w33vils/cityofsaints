@@ -1,0 +1,79 @@
+{
+  "kind": "collectionType",
+  "collectionName": "events",
+  "info": {
+    "singularName": "event",
+    "pluralName": "events",
+    "displayName": "Event",
+    "description": "Church events and gatherings"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "end_date": {
+      "type": "date"
+    },
+    "time": {
+      "type": "string"
+    },
+    "location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::location.location",
+      "inversedBy": "events"
+    },
+    "ministry": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::ministry.ministry",
+      "inversedBy": "events"
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["General", "Class", "Workshop", "Retreat", "Service", "Social", "Conference"]
+    },
+    "cover_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "registration_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "max_attendees": {
+      "type": "integer"
+    },
+    "registration_deadline": {
+      "type": "date"
+    },
+    "has_food": {
+      "type": "boolean",
+      "default": false
+    },
+    "offers_childcare": {
+      "type": "boolean",
+      "default": false
+    },
+    "external_registration_url": {
+      "type": "string"
+    }
+  }
+}

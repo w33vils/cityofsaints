@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_give_payment_methods",
+  "info": {
+    "displayName": "Payment Method",
+    "icon": "creditCard",
+    "description": "Primary giving method with fee info"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "fee": {
+      "type": "string"
+    },
+    "recommended": {
+      "type": "boolean"
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}
