@@ -337,140 +337,138 @@ const seedData = {
 };
 
 async function runSeed(strapi) {
-  const entityCount = await strapi.query("api::location.location").count();
-  if (entityCount > 0) {
+  // Check if seed already completed fully (site-setting is the last thing created)
+  const settingsCount = await strapi.query("api::site-setting.site-setting").count();
+  if (settingsCount > 0) {
     strapi.log.info("[seed] Data already exists — skipping seed.");
     return;
   }
 
-  strapi.log.info("[seed] Seeding City of Saints development data...");
+  strapi.log.info("[seed] Seeding City of Saints data...");
+
+  // Helper: find existing or create
+  async function findOrCreate(uid, slug, createFn) {
+    const existing = await strapi.query(uid).findOne({ where: { slug } });
+    if (existing) return existing;
+    return createFn();
+  }
 
   // 1. Locations
   const locationMap = {};
   for (const loc of seedData.locations) {
     const { service_times, ...locData } = loc;
-    const created = await strapi.documents("api::location.location").create({
-      data: { ...locData, service_times },
-      status: "published",
-    });
-    locationMap[loc.slug] = created;
+    locationMap[loc.slug] = await findOrCreate("api::location.location", loc.slug, () =>
+      strapi.documents("api::location.location").create({ data: { ...locData, service_times }, status: "published" })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.locations.length + " locations");
+  strapi.log.info("[seed] Locations ready");
 
   // 2. Initiatives
   const initiativeMap = {};
   for (const init of seedData.initiatives) {
-    const created = await strapi.documents("api::initiative.initiative").create({
-      data: init,
-      status: "published",
-    });
-    initiativeMap[init.slug] = created;
+    initiativeMap[init.slug] = await findOrCreate("api::initiative.initiative", init.slug, () =>
+      strapi.documents("api::initiative.initiative").create({ data: init, status: "published" })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.initiatives.length + " initiatives");
+  strapi.log.info("[seed] Initiatives ready");
 
   // 3. Ministries
   const ministryMap = {};
   for (const min of seedData.ministries) {
     const { what_we_do, faqs, ...minData } = min;
-    const created = await strapi.documents("api::ministry.ministry").create({
-      data: { ...minData, what_we_do, faqs },
-      status: "published",
-    });
-    ministryMap[min.slug] = created;
+    ministryMap[min.slug] = await findOrCreate("api::ministry.ministry", min.slug, () =>
+      strapi.documents("api::ministry.ministry").create({ data: { ...minData, what_we_do, faqs }, status: "published" })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.ministries.length + " ministries");
+  strapi.log.info("[seed] Ministries ready");
 
   // 4. Team Members
   const teamMap = {};
   for (const member of seedData.teamMembers) {
-    const created = await strapi.documents("api::team-member.team-member").create({
-      data: {
-        ...member,
-        congregation: locationMap["lodz-centrum"] ? locationMap["lodz-centrum"].documentId : undefined,
-      },
-      status: "published",
-    });
-    teamMap[member.slug] = created;
+    teamMap[member.slug] = await findOrCreate("api::team-member.team-member", member.slug, () =>
+      strapi.documents("api::team-member.team-member").create({
+        data: { ...member, congregation: locationMap["lodz-centrum"]?.documentId },
+        status: "published",
+      })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.teamMembers.length + " team members");
+  strapi.log.info("[seed] Team members ready");
 
   // 5. Sermon Series
   const seriesMap = {};
   for (const series of seedData.sermonSeries) {
-    const created = await strapi.documents("api::sermon-series.sermon-series").create({
-      data: series,
-      status: "published",
-    });
-    seriesMap[series.slug] = created;
+    seriesMap[series.slug] = await findOrCreate("api::sermon-series.sermon-series", series.slug, () =>
+      strapi.documents("api::sermon-series.sermon-series").create({ data: series, status: "published" })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.sermonSeries.length + " sermon series");
+  strapi.log.info("[seed] Sermon series ready");
 
   // 6. Sermons
   for (const sermon of seedData.sermons) {
-    await strapi.documents("api::sermon.sermon").create({
-      data: {
-        ...sermon,
-        preacher: teamMap["marek-kowalski"] ? teamMap["marek-kowalski"].documentId : undefined,
-        series: seriesMap["foundations-of-faith"] ? seriesMap["foundations-of-faith"].documentId : undefined,
-      },
-      status: "published",
-    });
+    await findOrCreate("api::sermon.sermon", sermon.slug, () =>
+      strapi.documents("api::sermon.sermon").create({
+        data: {
+          ...sermon,
+          preacher: teamMap["marek-kowalski"]?.documentId,
+          series: seriesMap["foundations-of-faith"]?.documentId,
+        },
+        status: "published",
+      })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.sermons.length + " sermons");
+  strapi.log.info("[seed] Sermons ready");
 
   // 7. Events
   for (const event of seedData.events) {
-    await strapi.documents("api::event.event").create({
-      data: {
-        ...event,
-        location: locationMap["lodz-centrum"] ? locationMap["lodz-centrum"].documentId : undefined,
-      },
-      status: "published",
-    });
+    await findOrCreate("api::event.event", event.slug, () =>
+      strapi.documents("api::event.event").create({
+        data: { ...event, location: locationMap["lodz-centrum"]?.documentId },
+        status: "published",
+      })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.events.length + " events");
+  strapi.log.info("[seed] Events ready");
 
   // 8. Articles
   for (const article of seedData.articles) {
-    await strapi.documents("api::article.article").create({
-      data: {
-        ...article,
-        author: teamMap["marek-kowalski"] ? teamMap["marek-kowalski"].documentId : undefined,
-      },
-      status: "published",
-    });
+    await findOrCreate("api::article.article", article.slug, () =>
+      strapi.documents("api::article.article").create({
+        data: { ...article, author: teamMap["marek-kowalski"]?.documentId },
+        status: "published",
+      })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.articles.length + " articles");
+  strapi.log.info("[seed] Articles ready");
 
   // 9. Classes
   for (const cls of seedData.classes) {
-    await strapi.documents("api::class.class").create({
-      data: {
-        ...cls,
-        location: locationMap["lodz-centrum"] ? locationMap["lodz-centrum"].documentId : undefined,
-      },
-      status: "published",
-    });
+    await findOrCreate("api::class.class", cls.slug, () =>
+      strapi.documents("api::class.class").create({
+        data: { ...cls, location: locationMap["lodz-centrum"]?.documentId },
+        status: "published",
+      })
+    );
   }
-  strapi.log.info("[seed] Created " + seedData.classes.length + " classes");
+  strapi.log.info("[seed] Classes ready");
 
-  // 10. Single types
-  await strapi.documents("api::home-page.home-page").create({
-    data: seedData.homePage,
-    status: "published",
-  });
-  strapi.log.info("[seed] Created home page content");
+  // 10. Single types (no slug — check by count)
+  const hpCount = await strapi.query("api::home-page.home-page").count();
+  if (hpCount === 0) {
+    await strapi.documents("api::home-page.home-page").create({ data: seedData.homePage, status: "published" });
+  }
+  strapi.log.info("[seed] Home page ready");
 
-  await strapi.documents("api::give-page.give-page").create({
-    data: seedData.givePage,
-    status: "published",
-  });
-  strapi.log.info("[seed] Created give page content");
+  const gpCount = await strapi.query("api::give-page.give-page").count();
+  if (gpCount === 0) {
+    await strapi.documents("api::give-page.give-page").create({ data: seedData.givePage, status: "published" });
+  }
+  strapi.log.info("[seed] Give page ready");
 
-  await strapi.documents("api::site-setting.site-setting").create({
-    data: seedData.siteSettings,
-  });
-  strapi.log.info("[seed] Created site settings");
+  const ssCount = await strapi.query("api::site-setting.site-setting").count();
+  if (ssCount === 0) {
+    await strapi.documents("api::site-setting.site-setting").create({ data: seedData.siteSettings });
+  }
+  strapi.log.info("[seed] Site settings ready");
 
   strapi.log.info("[seed] Seeding complete!");
 }
