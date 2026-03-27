@@ -1,11 +1,18 @@
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+const FETCH_TIMEOUT = 10_000; // 10 seconds
 
 async function fetchAPI<T>(path: string, params?: Record<string, string>): Promise<{ data: T; meta?: any }> {
   const url = new URL(`/api${path}`, STRAPI_URL);
   if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-  const res = await fetch(url.toString(), { next: { revalidate: 60 } });
-  if (!res.ok) throw new Error(`Strapi ${res.status}: ${path}`);
-  return res.json();
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+  try {
+    const res = await fetch(url.toString(), { next: { revalidate: 60 }, signal: controller.signal });
+    if (!res.ok) throw new Error(`Strapi ${res.status}: ${path}`);
+    return res.json();
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 export const getSermons = () => fetchAPI<any[]>("/sermons", { populate: "*", "sort": "date:desc" });
