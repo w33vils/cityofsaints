@@ -13,9 +13,11 @@ jobs:
         with:
           node-version: 22
       - name: Install CMS dependencies
-        run: cd cms && npm install
+        working-directory: cms
+        run: npm ci
       - name: Build CMS
-        run: cd cms && npm run build
+        working-directory: cms
+        run: npm run build
         env:
           NODE_ENV: production
           DATABASE_CLIENT: postgres
@@ -29,6 +31,11 @@ jobs:
           ADMIN_JWT_SECRET: build-admin-jwt
           TRANSFER_TOKEN_SALT: build-transfer-salt
           JWT_SECRET: build-jwt
+      - name: Remove dev dependencies
+        working-directory: cms
+        run: npm prune --omit=dev
+      - name: Create .skipBuild marker
+        run: touch cms/.skipBuild
       - uses: azure/webapps-deploy@v3
         with:
           app-name: cityofsaints-cms
@@ -44,14 +51,20 @@ jobs:
         with:
           node-version: 22
       - name: Install frontend dependencies
-        run: cd frontend && npm install
+        working-directory: frontend
+        run: npm ci
       - name: Build frontend
-        run: cd frontend && npm run build
+        working-directory: frontend
+        run: npm run build
         env:
           NEXT_PUBLIC_STRAPI_URL: ${{ secrets.STRAPI_URL }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.SITE_URL }}
+      - name: Assemble standalone package
+        run: |
+          cp -r frontend/public frontend/.next/standalone/public
+          cp -r frontend/.next/static frontend/.next/standalone/.next/static
       - uses: azure/webapps-deploy@v3
         with:
           app-name: cityofsaints-frontend
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
-          package: ./frontend
+          package: ./frontend/.next/standalone
