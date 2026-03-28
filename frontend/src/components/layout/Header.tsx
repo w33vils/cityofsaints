@@ -30,6 +30,7 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
+    <>
     <header
       className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-black/5"
       onMouseLeave={() => setActivePanel(null)}
@@ -103,8 +104,9 @@ export function Header() {
           </>
         )}
       </AnimatePresence>
+    </header>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer — outside header to avoid backdrop-filter containing block */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -155,6 +157,6 @@ export function Header() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
