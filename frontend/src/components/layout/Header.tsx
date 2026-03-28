@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 import { MegaNavPanel, megaPanels, type PanelKey } from "./MegaNavPanel";
 
 const navItems = [
@@ -110,47 +110,77 @@ export function Header() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 top-16 bg-white z-50 lg:hidden overflow-y-auto"
+            className="fixed inset-0 top-16 bg-[var(--color-bg)] z-50 lg:hidden overflow-y-auto"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <nav className="p-6 space-y-1">
-              {navItems.map((item) => {
+            <nav className="px-5 pt-4 pb-10">
+              {navItems.map((item, i) => {
                 if (item.href) {
                   return (
-                    <Link
+                    <motion.div
                       key={item.label}
-                      href={item.href}
-                      className="block py-3 text-lg font-medium text-[var(--color-heading)] border-b border-black/5 hover:text-[var(--color-green)]"
-                      onClick={() => setMobileOpen(false)}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.04, duration: 0.3 }}
                     >
-                      {item.label}
-                    </Link>
+                      <Link
+                        href={item.href}
+                        className="flex items-center justify-between py-4 text-[1.05rem] font-semibold text-[var(--color-heading)] border-b border-black/[0.06] hover:text-[var(--color-green)] transition-colors"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {item.label}
+                        <ChevronRight size={16} className="text-[var(--color-muted)]" />
+                      </Link>
+                    </motion.div>
                   );
                 }
                 const panel = megaPanels[item.panel!];
                 return (
-                  <details key={item.label} className="border-b border-black/5">
-                    <summary className="py-3 text-lg font-medium text-[var(--color-heading)] cursor-pointer hover:text-[var(--color-green)]">
-                      {item.label}
-                    </summary>
-                    <div className="pb-4 pl-4 space-y-2">
-                      {panel.columns.map((col) =>
-                        col.links.map((link) => (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            className="block py-1.5 text-[var(--color-text)] hover:text-[var(--color-green)]"
-                            onClick={() => setMobileOpen(false)}
-                          >
-                            {link.label}
-                          </Link>
-                        ))
-                      )}
-                    </div>
-                  </details>
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.04, duration: 0.3 }}
+                  >
+                    <details className="group border-b border-black/[0.06]">
+                      <summary className="flex items-center justify-between py-4 text-[1.05rem] font-semibold text-[var(--color-heading)] cursor-pointer hover:text-[var(--color-green)] transition-colors [&::-webkit-details-marker]:hidden list-none">
+                        {item.label}
+                        <ChevronRight size={16} className="text-[var(--color-muted)] transition-transform duration-200 group-open:rotate-90" />
+                      </summary>
+                      <div className="pb-4 pl-1 border-l-2 border-[var(--color-green)]/20 ml-1 space-y-0.5">
+                        {panel.columns.map((col) =>
+                          col.links.map((link) => {
+                            const Icon = link.icon;
+                            return (
+                              <Link
+                                key={link.href}
+                                href={link.href}
+                                className="flex items-start gap-3 px-3 py-2.5 rounded-lg hover:bg-black/[0.03] transition-colors"
+                                onClick={() => setMobileOpen(false)}
+                              >
+                                {Icon && (
+                                  <Icon size={18} className="text-[var(--color-green)] shrink-0 mt-0.5" />
+                                )}
+                                <div className="min-w-0">
+                                  <span className="block text-[0.92rem] font-medium text-[var(--color-heading)]">
+                                    {link.label}
+                                  </span>
+                                  {link.description && (
+                                    <span className="block text-[0.75rem] text-[var(--color-muted)] leading-snug mt-0.5">
+                                      {link.description}
+                                    </span>
+                                  )}
+                                </div>
+                              </Link>
+                            );
+                          })
+                        )}
+                      </div>
+                    </details>
+                  </motion.div>
                 );
               })}
             </nav>
