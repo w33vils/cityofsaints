@@ -55,7 +55,10 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
                 </span>
               )}
             </div>
-            <h1 className="font-[family-name:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] text-white leading-[1.1] mb-4">
+            <h1
+              className="font-[family-name:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] mb-4"
+              style={{ color: "#C4A265", textShadow: "0 2px 20px rgba(0,0,0,0.3)" }}
+            >
               {event.title}
             </h1>
             <div className="flex flex-wrap gap-5 text-white/70 text-sm">
